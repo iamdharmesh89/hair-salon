@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Welcome To Elite Saloon Booking</title>
+      {% include 'base.html'%}
+     {% include 'navbar.html' %}
+   </head>
+   <body id="page-top">
+    <style>
+        ul.day-change {
+            list-style: none;
+            display: flex;
+            gap: 8px;
+            padding: 0px 10px;
+        }
+
+        li.list-day-custom a {
+            background: red;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 23%;
+            cursor: pointer;
+        }
+
+
+        li.list-day-custom a:hover {
+            background: #ffc107;
+        }
+
+
+        li.list-day-custom a.mystyle {
+            background: #ffc107;
+        }
+
+        .custom-date-check-data p {
+            text-align: left;
+            padding: 2px 7px;
+            font-size: 19px;
+            font-weight: normal;
+        }
+
+
+        div#time-slots-section ul li {
+            list-style: none;
+            /* border: 1px solid red; */
+            text-align: initial;
+            border: 1px solid #e7e7e7;
+            padding: 5px 10px;
+        }
+
+        div#time-slots-section p {
+            font-size: 20px;
+            text-align: start;
+            padding: 1px 10px;
+        }
+
+        input.button.btn-success {
+    margin-top: 10px;
+}
+
+p.emergencey {
+    color:#58a54f;
+    font-size: inherit;
+    font-weight: 500;
+    padding: 10px 2px;
+}
+        </style>
+   <div class="container mt-5">
+        <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card mt-5">
+                <div class="card-title">
+                    <h4>Search Time Slot</h4><br>
+                </div>
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form method="GET" action="{% url 'customer:search' %}">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" class="form-control" name="date" id="DefaultDate" value="{% now 'Y-m-d' %}">
+                            </div>
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="time" class="form-control" name="start_time" value="12:00">
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="time" class="form-control" placeholder="Enter Check Out Time" name="end_time" value="15:00">
+                            </div>
+
+                            <div class="raw">
+                                <div class="custom-date-check-data">
+                                    <p>See Timeslots</p>
+                                    <ul class="day-change">
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Monday">Mon</a>
+                                        </li>
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Tuesday">Tue</a>
+                                        </li>
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Wednesday">Wed</a>
+                                        </li>
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Thursday">Thu</a>
+                                        </li>
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Friday">Fri</a>
+                                        </li>
+                                        <li class="list-day-custom">
+                                            <a id="myDIV" href="http://127.0.0.1:8000/customer/search_time_slot/#time-slots-section" class="day-link" data-day="Saturday">Sat</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="time-slots-section"></div>
+                            </div>
+                        </div>
+                            <input type="submit" class="button btn-success" style="cursor:pointer;" value="Submit">
+
+                        </form>
+                        <p class="emergencey">*For Emergency booking call on 8888888888</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+   {% include 'manager/scripts.html'%}
+
+   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.17.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script>
+    /*Working with ajax for data*/
+        $(document).ready(function () {
+            // Add click event listener to each day link
+            $('.day-link').on('click', function () {
+                // Get the value of the data-day attribute
+                var selectedDay = $(this).data('day');
+
+                // Make an Ajax call to fetch the time slots for the selected day
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/customer/search_time_slot/',
+                    data: { day: selectedDay },
+                    success: function (data) {
+                        // Update the time slots section with the fetched data
+                    },
+                    error: function () {
+                        // Show an error message to the user
+                        alert('Error fetching time slots');
+                    }
+                });
+            });
+        });
+
+        /*TimeSlot Jquery*/
+        $(document).ready(function () {
+            // Add click event listener to each day link
+            $('.day-link').on('click', function () {
+                // Get the value of the data-day attribute
+                var selectedDay = $(this).data('day');
+
+                // Generate time slots for the selected day
+                var Monday = [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '2:00 PM - 3:00 PM',
+                    '4:00 PM - 5:00 PM'
+                ];
+
+                var Tuesday = [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '11:00 AM - 12:00 PM',
+                    '4:00 PM - 5:00 PM'
+                ];
+
+                var Wednesday = [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '11:00 AM - 12:00 PM'
+                ];
+
+                var Thursday = [
+                    '9:00 AM - 10:00 AM',
+                    '11:00 AM - 12:00 PM',
+                    '2:00 PM - 3:00 PM',
+                    '4:00 PM - 5:00 PM'
+                ];
+
+                var Friday = [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '11:00 AM - 12:00 PM'
+                ];
+
+                var Saturday = [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '4:00 PM - 5:00 PM'
+                ];
+
+                // Create HTML markup for time slots
+                var timeSlotsHTML = '<p>' + selectedDay + '</p><ul>';
+                if (selectedDay == 'Monday') {
+                    for (var i = 0; i < Monday.length; i++) {
+                        timeSlotsHTML += '<li>' + Monday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+
+                if (selectedDay == 'Tuesday') {
+                    for (var i = 0; i < Tuesday.length; i++) {
+                        timeSlotsHTML += '<li>' + Tuesday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+
+
+                if (selectedDay == 'Wednesday') {
+                    for (var i = 0; i < Wednesday.length; i++) {
+                        timeSlotsHTML += '<li>' + Wednesday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+
+
+                if (selectedDay == 'Thursday') {
+                    for (var i = 0; i < Thursday.length; i++) {
+                        timeSlotsHTML += '<li>' + Thursday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+
+                if (selectedDay == 'Friday') {
+                    for (var i = 0; i < Friday.length; i++) {
+                        timeSlotsHTML += '<li>' + Friday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+
+                if (selectedDay == 'Saturday') {
+                    for (var i = 0; i < Saturday.length; i++) {
+                        timeSlotsHTML += '<li>' + Saturday[i] + '</li>';
+                    }
+                    timeSlotsHTML += '</ul>';
+                }
+                // Update the time slots section with the generated time slots
+                $('#time-slots-section').html(timeSlotsHTML);
+            });
+        });
+    </script>
+</body>
